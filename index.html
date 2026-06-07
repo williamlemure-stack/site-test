@@ -1,107 +1,1869 @@
-```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Site Internet</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 1rem 0;
-            text-align: center;
-        }
-        nav {
-            background-color: #444;
-            padding: 1rem;
-        }
-        nav ul {
-            list-style: none;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-        }
-        nav ul li {
-            margin: 0 1rem;
-        }
-        nav ul li a {
-            color: #fff;
-            text-decoration: none;
-        }
-        main {
-            padding: 2rem;
-        }
-        footer {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 1rem 0;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="DENTEM - Laboratoire de prothèse dentaire d'excellence en Bretagne. Prothèses sur mesure, CFAO, impression 3D, accompagnement des professionnels dentaires à Plouhinec, Morbihan.">
+<meta name="keywords" content="laboratoire prothèse dentaire Bretagne, prothésiste dentaire Morbihan, laboratoire dentaire Plouhinec, CFAO dentaire, prothèse dentaire sur mesure, laboratoire dentaire numérique">
+<meta property="og:title" content="DENTEM — L'excellence de la prothèse dentaire en Bretagne">
+<meta property="og:description" content="Laboratoire de prothèse dentaire de haute précision, solutions numériques et accompagnement des professionnels à Plouhinec, Morbihan.">
+<meta property="og:type" content="website">
+<title>DENTEM — L'excellence de la prothèse dentaire</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════════
+   DENTEM — DESIGN SYSTEM
+═══════════════════════════════════════════════════ */
+:root {
+  --crimson:     #B71C1C;
+  --crimson-deep:#8B0000;
+  --crimson-soft:#D32F2F;
+  --crimson-glow:rgba(183,28,28,0.15);
+  --white:       #FFFFFF;
+  --off-white:   #F8F6F3;
+  --pearl:       #F0EDE8;
+  --smoke:       #E5E1DA;
+  --slate:       #8C8680;
+  --iron:        #4A4540;
+  --anthracite:  #1C1A17;
+  --black:       #0D0C0A;
+
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body:    'DM Sans', sans-serif;
+  --font-mono:    'DM Mono', monospace;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur: 0.6s;
+
+  --r: 4px;
+  --r-lg: 12px;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md: 0 8px 32px rgba(0,0,0,0.10);
+  --shadow-lg: 0 24px 80px rgba(0,0,0,0.14);
+  --shadow-crimson: 0 8px 40px rgba(183,28,28,0.18);
+}
+
+[data-theme="dark"] {
+  --white:       #0D0C0A;
+  --off-white:   #141210;
+  --pearl:       #1C1A17;
+  --smoke:       #242119;
+  --slate:       #7A746E;
+  --iron:        #B0AA9E;
+  --anthracite:  #E8E2D8;
+  --black:       #F0EDE8;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+  --shadow-md: 0 8px 32px rgba(0,0,0,0.4);
+  --shadow-lg: 0 24px 80px rgba(0,0,0,0.5);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--white);
+  color: var(--anthracite);
+  line-height: 1.6;
+  overflow-x: hidden;
+  transition: background 0.4s, color 0.4s;
+}
+
+/* ─── LOADER ─── */
+#loader {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--black);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  transition: opacity 0.6s var(--ease-out), visibility 0.6s;
+}
+#loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.loader-logo {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 300;
+  letter-spacing: 0.3em;
+  color: var(--white);
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: loaderFade 0.8s 0.3s forwards;
+}
+.loader-bar {
+  width: 200px; height: 1px;
+  background: rgba(255,255,255,0.1);
+  position: relative; overflow: hidden;
+}
+.loader-bar::after {
+  content: '';
+  position: absolute; top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, var(--crimson), transparent);
+  animation: loaderSlide 1.2s 0.5s ease-in-out infinite;
+}
+@keyframes loaderFade { to { opacity: 1; } }
+@keyframes loaderSlide { to { left: 200%; } }
+
+/* ─── CURSOR ─── */
+.cursor {
+  width: 8px; height: 8px;
+  background: var(--crimson);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 9998;
+  transition: transform 0.1s;
+  transform: translate(-50%,-50%);
+}
+.cursor-ring {
+  width: 36px; height: 36px;
+  border: 1px solid rgba(183,28,28,0.4);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 9997;
+  transition: transform 0.18s var(--ease-out), width 0.3s, height 0.3s, opacity 0.3s;
+  transform: translate(-50%,-50%);
+}
+.cursor-ring.hovered { width: 56px; height: 56px; opacity: 0.6; }
+@media (hover: none) { .cursor, .cursor-ring { display: none; } }
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--smoke); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--crimson); }
+
+/* ─── NAVIGATION ─── */
+#navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 0 5%;
+  transition: background 0.4s, box-shadow 0.4s, padding 0.4s;
+}
+#navbar.scrolled {
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.06);
+  padding: 0 5%;
+}
+[data-theme="dark"] #navbar.scrolled {
+  background: rgba(13,12,10,0.92);
+}
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 80px; max-width: 1400px; margin: 0 auto;
+}
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: var(--white);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+#navbar.scrolled .nav-logo { color: var(--anthracite); }
+.nav-links {
+  display: flex; align-items: center; gap: 2.5rem;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  transition: color 0.3s;
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute; bottom: -4px; left: 0;
+  width: 0; height: 1px;
+  background: var(--crimson);
+  transition: width 0.3s var(--ease-out);
+}
+.nav-links a:hover { color: var(--white); }
+.nav-links a:hover::after { width: 100%; }
+#navbar.scrolled .nav-links a { color: var(--iron); }
+#navbar.scrolled .nav-links a:hover { color: var(--anthracite); }
+.nav-cta {
+  background: var(--crimson);
+  color: white !important;
+  padding: 10px 24px !important;
+  border-radius: var(--r);
+  letter-spacing: 0.1em !important;
+  transition: background 0.3s, transform 0.2s !important;
+}
+.nav-cta:hover { background: var(--crimson-deep) !important; transform: translateY(-1px); }
+.nav-cta::after { display: none !important; }
+
+/* Dark mode toggle */
+.dark-toggle {
+  background: none; border: 1px solid rgba(255,255,255,0.3);
+  width: 38px; height: 38px;
+  border-radius: 50%; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; transition: all 0.3s; color: white;
+  margin-left: 1rem;
+}
+#navbar.scrolled .dark-toggle { border-color: var(--smoke); color: var(--iron); }
+.dark-toggle:hover { background: var(--crimson-glow); border-color: var(--crimson); }
+
+/* Mobile menu */
+.hamburger {
+  display: none; flex-direction: column; gap: 5px;
+  cursor: pointer; padding: 8px; background: none; border: none;
+}
+.hamburger span {
+  display: block; width: 24px; height: 1.5px;
+  background: white; transition: all 0.3s;
+}
+#navbar.scrolled .hamburger span { background: var(--anthracite); }
+.hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+#mobile-menu {
+  position: fixed; inset: 0; z-index: 99;
+  background: var(--black);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.4s, visibility 0.4s;
+}
+#mobile-menu.open { opacity: 1; visibility: visible; }
+.mobile-links {
+  list-style: none; text-align: center;
+  display: flex; flex-direction: column; gap: 2rem;
+}
+.mobile-links a {
+  font-family: var(--font-display);
+  font-size: 2.5rem; font-weight: 300;
+  color: rgba(255,255,255,0.8);
+  text-decoration: none; letter-spacing: 0.05em;
+  transition: color 0.3s;
+}
+.mobile-links a:hover { color: var(--crimson); }
+
+/* ─── HERO ─── */
+#hero {
+  min-height: 100vh;
+  background: var(--black);
+  position: relative;
+  display: flex; align-items: center;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: 
+    radial-gradient(ellipse 60% 80% at 70% 50%, rgba(183,28,28,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 20% 80%, rgba(183,28,28,0.06) 0%, transparent 50%);
+}
+.hero-grid {
+  position: absolute; inset: 0; opacity: 0.04;
+  background-image: 
+    linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.hero-orb {
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(183,28,28,0.15) 0%, transparent 70%);
+  right: -100px; top: 50%;
+  transform: translateY(-50%);
+  animation: orbPulse 6s ease-in-out infinite alternate;
+}
+@keyframes orbPulse {
+  from { transform: translateY(-50%) scale(1); opacity: 0.6; }
+  to { transform: translateY(-50%) scale(1.15); opacity: 1; }
+}
+.hero-content {
+  position: relative; z-index: 2;
+  padding: 0 5%; max-width: 1400px; margin: 0 auto;
+  width: 100%;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem; letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--crimson-soft);
+  border: 1px solid rgba(183,28,28,0.3);
+  padding: 6px 16px; border-radius: 100px;
+  margin-bottom: 2rem;
+  opacity: 0; animation: heroReveal 0.8s 0.5s var(--ease-out) forwards;
+}
+.hero-badge::before {
+  content: ''; width: 6px; height: 6px;
+  border-radius: 50%; background: var(--crimson);
+  animation: blink 2s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 7vw, 6.5rem);
+  font-weight: 300;
+  line-height: 1.08;
+  color: var(--white);
+  margin-bottom: 1.5rem;
+  opacity: 0; animation: heroReveal 0.9s 0.7s var(--ease-out) forwards;
+}
+.hero-title em {
+  font-style: italic;
+  color: var(--crimson-soft);
+}
+.hero-sub {
+  font-size: 1.05rem; font-weight: 300;
+  color: rgba(255,255,255,0.55);
+  max-width: 520px; line-height: 1.75;
+  margin-bottom: 3rem;
+  opacity: 0; animation: heroReveal 0.9s 0.9s var(--ease-out) forwards;
+}
+.hero-actions {
+  display: flex; gap: 1rem; flex-wrap: wrap;
+  opacity: 0; animation: heroReveal 0.9s 1.1s var(--ease-out) forwards;
+}
+.btn-primary {
+  background: var(--crimson);
+  color: white;
+  border: none;
+  padding: 15px 36px;
+  font-family: var(--font-body);
+  font-size: 0.8rem; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  border-radius: var(--r);
+  cursor: pointer; text-decoration: none;
+  transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-primary:hover {
+  background: var(--crimson-deep);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-crimson);
+}
+.btn-outline {
+  background: transparent;
+  color: rgba(255,255,255,0.8);
+  border: 1px solid rgba(255,255,255,0.25);
+  padding: 15px 36px;
+  font-family: var(--font-body);
+  font-size: 0.8rem; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  border-radius: var(--r);
+  cursor: pointer; text-decoration: none;
+  transition: all 0.3s;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-outline:hover {
+  border-color: var(--crimson);
+  color: white;
+  background: rgba(183,28,28,0.08);
+}
+.hero-scroll {
+  position: absolute; bottom: 2.5rem; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center;
+  gap: 8px; color: rgba(255,255,255,0.35);
+  font-family: var(--font-mono); font-size: 0.65rem;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  animation: scrollBob 2s ease-in-out infinite;
+}
+.hero-scroll svg { animation: scrollBob 2s 0.5s ease-in-out infinite; }
+@keyframes scrollBob {
+  0%,100% { transform: translateY(0) translateX(-50%); }
+  50% { transform: translateY(6px) translateX(-50%); }
+}
+.hero-stats {
+  position: absolute; bottom: 3rem; right: 5%;
+  display: flex; gap: 3rem;
+  opacity: 0; animation: heroReveal 0.9s 1.3s var(--ease-out) forwards;
+}
+.hero-stat-num {
+  font-family: var(--font-display);
+  font-size: 2.2rem; font-weight: 300;
+  color: white; line-height: 1;
+}
+.hero-stat-label {
+  font-size: 0.7rem; font-weight: 400; letter-spacing: 0.12em;
+  text-transform: uppercase; color: rgba(255,255,255,0.4);
+  margin-top: 4px;
+}
+@keyframes heroReveal {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes heroRevealNoOffset {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ─── SECTION SYSTEM ─── */
+.section {
+  padding: 120px 5%;
+}
+.section-inner {
+  max-width: 1400px; margin: 0 auto;
+}
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--crimson);
+  margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 12px;
+}
+.section-label::before {
+  content: ''; display: block;
+  width: 32px; height: 1px; background: var(--crimson);
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 4vw, 3.8rem);
+  font-weight: 300; line-height: 1.12;
+  color: var(--anthracite);
+  margin-bottom: 1.5rem;
+}
+.section-title em { font-style: italic; color: var(--crimson); }
+.section-desc {
+  font-size: 1rem; font-weight: 300;
+  color: var(--iron); line-height: 1.8;
+  max-width: 560px;
+}
+
+/* Reveal animations */
+.reveal {
+  opacity: 0; transform: translateY(40px);
+  transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+}
+.reveal.visible { opacity: 1; transform: none; }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-5 { transition-delay: 0.5s; }
+
+/* ─── ABOUT ─── */
+#about { background: var(--off-white); }
+.about-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 100px; align-items: center;
+}
+.about-visual {
+  position: relative; height: 560px;
+}
+.about-img-main {
+  position: absolute;
+  width: 75%; height: 85%;
+  top: 0; right: 0;
+  background: linear-gradient(135deg, var(--smoke) 0%, var(--pearl) 100%);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+.about-img-main::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpath d='M30 5L55 20V50L30 55L5 50V20z' fill='none' stroke='%23B71C1C' stroke-width='0.5' opacity='0.15'/%3E%3C/svg%3E") center/30px;
+}
+.about-img-accent {
+  position: absolute;
+  width: 55%; height: 50%;
+  bottom: 0; left: 0;
+  background: var(--crimson);
+  border-radius: var(--r-lg);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: var(--shadow-crimson);
+}
+.about-img-accent-inner {
+  text-align: center; color: white; padding: 2rem;
+}
+.about-accent-num {
+  font-family: var(--font-display);
+  font-size: 3.5rem; font-weight: 300;
+  line-height: 1;
+}
+.about-accent-label {
+  font-size: 0.75rem; letter-spacing: 0.12em;
+  text-transform: uppercase; opacity: 0.7; margin-top: 6px;
+}
+.about-badge-float {
+  position: absolute;
+  top: 20%; right: -20px;
+  background: var(--white);
+  border-radius: var(--r);
+  padding: 14px 20px;
+  box-shadow: var(--shadow-md);
+  display: flex; align-items: center; gap: 12px;
+  font-size: 0.8rem; font-weight: 500;
+  color: var(--anthracite); white-space: nowrap;
+}
+.about-badge-float::before {
+  content: '✓';
+  width: 28px; height: 28px;
+  background: rgba(183,28,28,0.1);
+  color: var(--crimson);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; flex-shrink: 0;
+}
+.values-list { list-style: none; display: flex; flex-direction: column; gap: 1.2rem; margin-top: 2.5rem; }
+.value-item {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 1.2rem 1.5rem;
+  background: var(--white);
+  border-radius: var(--r);
+  border-left: 3px solid transparent;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.value-item:hover { border-left-color: var(--crimson); box-shadow: var(--shadow-sm); }
+.value-icon {
+  width: 36px; height: 36px; flex-shrink: 0;
+  background: var(--crimson-glow);
+  color: var(--crimson);
+  border-radius: var(--r);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+}
+.value-title { font-weight: 500; font-size: 0.9rem; margin-bottom: 3px; }
+.value-desc { font-size: 0.8rem; color: var(--iron); line-height: 1.6; }
+
+/* ─── SERVICES ─── */
+#services { background: var(--white); }
+.services-header {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-bottom: 4rem; gap: 2rem; flex-wrap: wrap;
+}
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5px;
+  background: var(--smoke);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+.service-card {
+  background: var(--white);
+  padding: 2.5rem;
+  transition: background 0.3s;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+}
+.service-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0;
+  width: 0; height: 2px;
+  background: var(--crimson);
+  transition: width 0.4s var(--ease-out);
+}
+.service-card:hover { background: var(--off-white); }
+.service-card:hover::before { width: 100%; }
+.service-num {
+  font-family: var(--font-mono);
+  font-size: 0.65rem; color: var(--crimson);
+  letter-spacing: 0.15em; margin-bottom: 1.2rem;
+  opacity: 0.7;
+}
+.service-icon {
+  width: 48px; height: 48px;
+  margin-bottom: 1.5rem;
+  color: var(--crimson);
+}
+.service-title {
+  font-family: var(--font-display);
+  font-size: 1.3rem; font-weight: 500;
+  margin-bottom: 0.75rem; line-height: 1.2;
+}
+.service-desc {
+  font-size: 0.85rem; color: var(--iron);
+  line-height: 1.7;
+}
+.service-arrow {
+  position: absolute; bottom: 2rem; right: 2rem;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--crimson-glow);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--crimson);
+  transform: scale(0);
+  transition: transform 0.3s var(--ease-out);
+}
+.service-card:hover .service-arrow { transform: scale(1); }
+
+/* ─── TECHNOLOGIES ─── */
+#technologies { background: var(--black); }
+#technologies .section-title,
+#technologies .section-label { color: rgba(255,255,255,0.9); }
+#technologies .section-label { color: var(--crimson-soft); }
+#technologies .section-label::before { background: var(--crimson-soft); }
+#technologies .section-desc { color: rgba(255,255,255,0.45); }
+.tech-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 1px; background: rgba(255,255,255,0.06);
+  border-radius: var(--r-lg); overflow: hidden;
+  margin-top: 4rem;
+}
+.tech-item {
+  background: rgba(255,255,255,0.02);
+  padding: 3rem 2rem;
+  transition: background 0.3s;
+  text-align: center; position: relative;
+}
+.tech-item:hover { background: rgba(255,255,255,0.05); }
+.tech-item-icon {
+  font-size: 2.2rem; margin-bottom: 1.2rem;
+  display: block;
+}
+.tech-item-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem; font-weight: 400;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 0.6rem;
+}
+.tech-item-desc {
+  font-size: 0.78rem; color: rgba(255,255,255,0.35);
+  line-height: 1.7;
+}
+.tech-item-badge {
+  display: inline-block; margin-top: 1rem;
+  font-family: var(--font-mono); font-size: 0.6rem;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--crimson-soft);
+  border: 1px solid rgba(183,28,28,0.3);
+  padding: 3px 10px; border-radius: 100px;
+}
+.tech-showcase {
+  margin-top: 5rem;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 40px; align-items: center;
+}
+.tech-showcase-visual {
+  height: 380px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--r-lg);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.tech-showcase-visual::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 70% at 50% 50%, rgba(183,28,28,0.08) 0%, transparent 70%);
+}
+.tech-diagram {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 0;
+  position: relative; z-index: 1;
+}
+.tech-node {
+  width: 80px; height: 80px; border-radius: 50%;
+  border: 1px solid rgba(183,28,28,0.4);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem;
+  background: rgba(183,28,28,0.06);
+  animation: techPulse 3s ease-in-out infinite;
+}
+.tech-node.center {
+  width: 100px; height: 100px; font-size: 2rem;
+  border-color: var(--crimson);
+  background: rgba(183,28,28,0.12);
+  animation: techPulse 2s ease-in-out infinite;
+}
+.tech-connector {
+  width: 1px; height: 30px;
+  background: linear-gradient(to bottom, rgba(183,28,28,0.5), transparent);
+}
+.tech-nodes-row {
+  display: flex; gap: 40px;
+  align-items: center;
+}
+@keyframes techPulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(183,28,28,0.2); }
+  50% { box-shadow: 0 0 0 12px rgba(183,28,28,0); }
+}
+.tech-showcase-list { display: flex; flex-direction: column; gap: 1rem; }
+.tech-feat {
+  padding: 1.2rem 1.5rem;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--r);
+  display: flex; gap: 1rem; align-items: flex-start;
+  transition: border-color 0.3s, background 0.3s;
+}
+.tech-feat:hover { border-color: rgba(183,28,28,0.3); background: rgba(183,28,28,0.04); }
+.tech-feat-icon {
+  width: 36px; height: 36px; flex-shrink: 0;
+  background: rgba(183,28,28,0.1);
+  color: var(--crimson-soft);
+  border-radius: var(--r);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+}
+.tech-feat-title { font-size: 0.9rem; font-weight: 500; color: rgba(255,255,255,0.85); margin-bottom: 3px; }
+.tech-feat-desc { font-size: 0.78rem; color: rgba(255,255,255,0.35); line-height: 1.6; }
+
+/* ─── GALLERY ─── */
+#gallery { background: var(--off-white); }
+.gallery-filter {
+  display: flex; gap: 0.5rem; margin-bottom: 2.5rem; flex-wrap: wrap;
+}
+.filter-btn {
+  background: transparent;
+  border: 1px solid var(--smoke);
+  color: var(--iron);
+  font-family: var(--font-body);
+  font-size: 0.75rem; font-weight: 500;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 8px 20px; border-radius: 100px;
+  cursor: pointer; transition: all 0.3s;
+}
+.filter-btn.active, .filter-btn:hover {
+  background: var(--crimson);
+  border-color: var(--crimson);
+  color: white;
+}
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: auto;
+  gap: 12px;
+}
+.gallery-item {
+  border-radius: var(--r);
+  overflow: hidden;
+  position: relative; cursor: pointer;
+  background: var(--smoke);
+}
+.gallery-item:nth-child(1) { grid-column: span 5; grid-row: span 2; }
+.gallery-item:nth-child(2) { grid-column: span 4; grid-row: span 1; }
+.gallery-item:nth-child(3) { grid-column: span 3; grid-row: span 1; }
+.gallery-item:nth-child(4) { grid-column: span 4; grid-row: span 1; }
+.gallery-item:nth-child(5) { grid-column: span 3; grid-row: span 1; }
+.gallery-item:nth-child(6) { grid-column: span 4; grid-row: span 2; }
+.gallery-item:nth-child(7) { grid-column: span 4; grid-row: span 1; }
+.gallery-item:nth-child(8) { grid-column: span 4; grid-row: span 1; }
+.gallery-item-inner {
+  width: 100%; height: 100%; min-height: 160px;
+  position: relative; overflow: hidden;
+}
+.gallery-placeholder {
+  width: 100%; height: 100%; min-height: 160px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem; opacity: 0.3;
+  background: linear-gradient(135deg, var(--pearl), var(--smoke));
+}
+.gallery-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
+  opacity: 0; transition: opacity 0.3s;
+  display: flex; align-items: flex-end; padding: 1.2rem;
+}
+.gallery-item:hover .gallery-overlay { opacity: 1; }
+.gallery-overlay-title {
+  font-family: var(--font-display);
+  font-size: 1rem; color: white;
+}
+.gallery-overlay-tag {
+  font-family: var(--font-mono); font-size: 0.65rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--crimson-soft); display: block; margin-bottom: 4px;
+}
+.gallery-zoom {
+  position: absolute; top: 1rem; right: 1rem;
+  width: 36px; height: 36px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 1rem;
+  opacity: 0; transition: opacity 0.3s, transform 0.3s;
+  transform: scale(0.8);
+}
+.gallery-item:hover .gallery-zoom { opacity: 1; transform: scale(1); }
+
+/* Lightbox */
+#lightbox {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.95);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.4s, visibility 0.4s;
+}
+#lightbox.open { opacity: 1; visibility: visible; }
+.lightbox-close {
+  position: absolute; top: 2rem; right: 2rem;
+  width: 44px; height: 44px;
+  background: rgba(255,255,255,0.1);
+  border: none; border-radius: 50%; cursor: pointer;
+  color: white; font-size: 1.2rem;
+  transition: background 0.3s;
+}
+.lightbox-close:hover { background: var(--crimson); }
+.lightbox-content {
+  max-width: 80vw; max-height: 80vh;
+  border-radius: var(--r-lg); overflow: hidden;
+  font-size: 6rem; text-align: center; padding: 3rem;
+}
+
+/* ─── WHY ─── */
+#why { background: var(--white); }
+.why-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: center; margin-top: 4rem;
+}
+.why-text { display: flex; flex-direction: column; gap: 2rem; }
+.why-item {
+  display: flex; gap: 1.5rem; align-items: flex-start;
+}
+.why-num {
+  font-family: var(--font-display);
+  font-size: 3rem; font-weight: 300;
+  color: var(--crimson); line-height: 1;
+  min-width: 60px;
+}
+.why-title { font-weight: 500; margin-bottom: 6px; }
+.why-desc { font-size: 0.85rem; color: var(--iron); line-height: 1.75; }
+.counters-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.5px;
+  background: var(--smoke); border-radius: var(--r-lg); overflow: hidden;
+}
+.counter-card {
+  background: var(--off-white); padding: 2.5rem 2rem;
+  text-align: center;
+}
+.counter-num {
+  font-family: var(--font-display);
+  font-size: 3.5rem; font-weight: 300;
+  color: var(--anthracite); line-height: 1;
+  display: flex; align-items: flex-start; justify-content: center;
+}
+.counter-suffix {
+  font-family: var(--font-display);
+  font-size: 1.8rem; color: var(--crimson);
+  margin-top: 0.5rem;
+}
+.counter-label {
+  font-size: 0.78rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--iron);
+  margin-top: 0.5rem;
+}
+
+/* ─── TESTIMONIALS ─── */
+#testimonials { background: var(--off-white); overflow: hidden; }
+.testi-track-wrap { overflow: hidden; margin-top: 3rem; }
+.testi-track {
+  display: flex; gap: 1.5rem;
+  transition: transform 0.5s var(--ease-out);
+}
+.testi-card {
+  background: var(--white);
+  border-radius: var(--r-lg);
+  padding: 2.5rem;
+  min-width: 380px; flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+}
+.testi-quote {
+  font-family: var(--font-display);
+  font-size: 3rem; color: var(--crimson);
+  line-height: 0.5; margin-bottom: 1rem;
+  opacity: 0.3;
+}
+.testi-text {
+  font-size: 0.95rem; line-height: 1.75;
+  color: var(--iron); font-style: italic;
+  margin-bottom: 1.5rem;
+}
+.testi-author { display: flex; align-items: center; gap: 12px; }
+.testi-avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--crimson);
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-weight: 500;
+  font-family: var(--font-display); font-size: 1.1rem;
+}
+.testi-name { font-weight: 500; font-size: 0.9rem; }
+.testi-role { font-size: 0.75rem; color: var(--slate); }
+.testi-stars { color: var(--crimson); font-size: 0.75rem; margin-bottom: 2px; }
+.testi-controls {
+  display: flex; align-items: center; gap: 1rem; margin-top: 2rem;
+}
+.testi-btn {
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid var(--smoke);
+  background: var(--white); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--iron); font-size: 1rem;
+  transition: all 0.3s;
+}
+.testi-btn:hover { border-color: var(--crimson); color: var(--crimson); }
+.testi-dots { display: flex; gap: 6px; }
+.testi-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--smoke); cursor: pointer;
+  transition: all 0.3s;
+}
+.testi-dot.active { background: var(--crimson); width: 20px; border-radius: 3px; }
+
+/* ─── CONTACT ─── */
+#contact { background: var(--white); }
+.contact-grid {
+  display: grid; grid-template-columns: 1fr 1.2fr;
+  gap: 80px; align-items: start;
+}
+.contact-info { display: flex; flex-direction: column; gap: 2rem; }
+.contact-info-item { display: flex; gap: 1rem; align-items: flex-start; }
+.contact-info-icon {
+  width: 44px; height: 44px; flex-shrink: 0;
+  background: var(--crimson-glow);
+  color: var(--crimson); border-radius: var(--r);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+}
+.contact-info-label {
+  font-size: 0.7rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--slate); margin-bottom: 4px;
+}
+.contact-info-value { font-size: 0.95rem; color: var(--anthracite); line-height: 1.6; }
+.map-embed {
+  height: 200px; border-radius: var(--r-lg);
+  overflow: hidden; margin-top: 2rem;
+  background: var(--pearl);
+  border: 1px solid var(--smoke);
+}
+.map-embed iframe { width: 100%; height: 100%; border: none; }
+.form-group { margin-bottom: 1.2rem; }
+.form-label {
+  display: block; font-size: 0.72rem;
+  font-weight: 500; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--iron);
+  margin-bottom: 6px;
+}
+.form-input, .form-textarea {
+  width: 100%; padding: 13px 16px;
+  background: var(--off-white);
+  border: 1px solid var(--smoke);
+  border-radius: var(--r); font-family: var(--font-body);
+  font-size: 0.9rem; color: var(--anthracite);
+  transition: border-color 0.3s, box-shadow 0.3s;
+  outline: none;
+}
+.form-input:focus, .form-textarea:focus {
+  border-color: var(--crimson);
+  box-shadow: 0 0 0 3px var(--crimson-glow);
+}
+.form-textarea { resize: vertical; min-height: 130px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.form-note {
+  font-size: 0.75rem; color: var(--slate);
+  margin-top: 0.5rem; line-height: 1.6;
+}
+.form-success {
+  display: none;
+  background: rgba(183,28,28,0.06);
+  border: 1px solid rgba(183,28,28,0.2);
+  border-radius: var(--r); padding: 1rem 1.5rem;
+  color: var(--crimson); font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+/* ─── FOOTER ─── */
+footer {
+  background: var(--black);
+  padding: 80px 5% 40px;
+}
+.footer-inner { max-width: 1400px; margin: 0 auto; }
+.footer-top {
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 60px; padding-bottom: 60px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.footer-brand-name {
+  font-family: var(--font-display);
+  font-size: 2rem; font-weight: 300;
+  letter-spacing: 0.15em; color: white;
+  margin-bottom: 1rem;
+}
+.footer-brand-desc {
+  font-size: 0.82rem; color: rgba(255,255,255,0.35);
+  line-height: 1.8; max-width: 280px; margin-bottom: 1.5rem;
+}
+.footer-col-title {
+  font-family: var(--font-mono); font-size: 0.65rem;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(255,255,255,0.4); margin-bottom: 1.5rem;
+}
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+.footer-links a {
+  font-size: 0.82rem; color: rgba(255,255,255,0.45);
+  text-decoration: none; transition: color 0.3s;
+}
+.footer-links a:hover { color: var(--crimson-soft); }
+.footer-bottom {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 40px; flex-wrap: wrap; gap: 1rem;
+}
+.footer-copy {
+  font-size: 0.75rem; color: rgba(255,255,255,0.25);
+}
+.footer-socials { display: flex; gap: 12px; }
+.social-btn {
+  width: 38px; height: 38px; border-radius: var(--r);
+  border: 1px solid rgba(255,255,255,0.1);
+  background: transparent; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.4); font-size: 0.9rem;
+  transition: all 0.3s; text-decoration: none;
+}
+.social-btn:hover { border-color: var(--crimson); color: var(--crimson); }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1024px) {
+  .services-grid { grid-template-columns: 1fr 1fr; }
+  .tech-grid { grid-template-columns: 1fr 1fr; }
+  .about-grid, .why-grid, .contact-grid, .tech-showcase { grid-template-columns: 1fr; gap: 40px; }
+  .about-visual { height: 340px; }
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+  .hero-stats { display: none; }
+}
+@media (max-width: 768px) {
+  .section { padding: 80px 5%; }
+  .nav-links, .dark-toggle { display: none; }
+  .hamburger { display: flex; }
+  .services-grid { grid-template-columns: 1fr; gap: 1px; }
+  .tech-grid { grid-template-columns: 1fr; }
+  .gallery-grid { grid-template-columns: 1fr 1fr; }
+  .gallery-item:nth-child(n) { grid-column: span 1; grid-row: span 1; }
+  .counters-grid { grid-template-columns: 1fr 1fr; }
+  .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+  .form-row { grid-template-columns: 1fr; }
+  .hero-title { font-size: 2.5rem; }
+  .testi-card { min-width: 300px; }
+}
+</style>
 </head>
 <body>
-    <header>
-        <h1>Bienvenue sur Mon Site Internet</h1>
-    </header>
-    <nav>
-        <ul>
-            <li><a href="#accueil">Accueil</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#contact">Contact</a></li>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo">DENTEM</div>
+  <div class="loader-bar"></div>
+</div>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">DENTEM</a>
+    <ul class="nav-links">
+      <li><a href="#about">L'entreprise</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#technologies">Technologies</a></li>
+      <li><a href="#gallery">Réalisations</a></li>
+      <li><a href="#testimonials">Témoignages</a></li>
+      <li><a href="#contact" class="nav-cta">Nous contacter</a></li>
+    </ul>
+    <button class="dark-toggle" id="dark-toggle" title="Basculer le mode sombre">🌙</button>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div id="mobile-menu">
+  <ul class="mobile-links">
+    <li><a href="#about" class="mobile-link">L'entreprise</a></li>
+    <li><a href="#services" class="mobile-link">Services</a></li>
+    <li><a href="#technologies" class="mobile-link">Technologies</a></li>
+    <li><a href="#gallery" class="mobile-link">Réalisations</a></li>
+    <li><a href="#testimonials" class="mobile-link">Témoignages</a></li>
+    <li><a href="#contact" class="mobile-link">Contact</a></li>
+  </ul>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-orb"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Laboratoire de prothèse dentaire — Bretagne</div>
+    <h1 class="hero-title">
+      DENTEM,<br>
+      <em>l'excellence</em><br>
+      de la prothèse dentaire
+    </h1>
+    <p class="hero-sub">Solutions techniques, expertise artisanale et technologies numériques au service des professionnels dentaires.</p>
+    <div class="hero-actions">
+      <a href="#services" class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        Découvrir nos services
+      </a>
+      <a href="#contact" class="btn-outline">Nous contacter</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>Défiler</span>
+    <svg width="14" height="20" viewBox="0 0 14 20" fill="none" stroke="currentColor" stroke-width="1.5">
+      <rect x="1" y="1" width="12" height="18" rx="6"/>
+      <circle cx="7" cy="6" r="1.5" fill="currentColor"/>
+    </svg>
+  </div>
+  <div class="hero-stats">
+    <div>
+      <div class="hero-stat-num">15+</div>
+      <div class="hero-stat-label">Années d'expertise</div>
+    </div>
+    <div>
+      <div class="hero-stat-num">500+</div>
+      <div class="hero-stat-label">Chirurgiens partenaires</div>
+    </div>
+    <div>
+      <div class="hero-stat-num">100%</div>
+      <div class="hero-stat-label">Fait en Bretagne</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ABOUT ═══ -->
+<section id="about" class="section">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div class="about-visual reveal">
+        <div class="about-img-main"></div>
+        <div class="about-img-accent">
+          <div class="about-img-accent-inner">
+            <div class="about-accent-num">15+</div>
+            <div class="about-accent-label">Ans d'excellence</div>
+          </div>
+        </div>
+        <div class="about-badge-float">Certifié ISO 13485</div>
+      </div>
+      <div>
+        <div class="section-label reveal">Notre ADN</div>
+        <h2 class="section-title reveal reveal-delay-1">
+          L'art et la science<br>au service du <em>sourire</em>
+        </h2>
+        <p class="section-desc reveal reveal-delay-2">DENTEM est un laboratoire de prothèse dentaire de haute précision installé à Plouhinec, au cœur de la Bretagne. Nous combinons maîtrise artisanale et technologies numériques de pointe pour offrir aux chirurgiens-dentistes des solutions d'excellence.</p>
+        <ul class="values-list">
+          <li class="value-item reveal reveal-delay-2">
+            <div class="value-icon">🎯</div>
+            <div>
+              <div class="value-title">Précision absolue</div>
+              <div class="value-desc">Chaque prothèse est fabriquée avec une rigueur millimétrée, conjuguant expérience artisanale et équipements de dernière génération.</div>
+            </div>
+          </li>
+          <li class="value-item reveal reveal-delay-3">
+            <div class="value-icon">🔬</div>
+            <div>
+              <div class="value-title">Innovation continue</div>
+              <div class="value-desc">Flux numérique complet, CFAO, impression 3D : nous investissons en permanence dans les technologies qui transforment la prothèse dentaire.</div>
+            </div>
+          </li>
+          <li class="value-item reveal reveal-delay-4">
+            <div class="value-icon">🤝</div>
+            <div>
+              <div class="value-title">Partenariat durable</div>
+              <div class="value-desc">Nous nous positionnons comme partenaire technique de long terme des cabinets dentaires, de la conception jusqu'à la livraison.</div>
+            </div>
+          </li>
         </ul>
-    </nav>
-    <main>
-        <section id="accueil">
-            <h2>Accueil</h2>
-            <p>Bienvenue sur notre site internet. Nous sommes ravis de vous accueillir ici.</p>
-        </section>
-        <section id="services">
-            <h2>Services</h2>
-            <p>Découvrez nos services et comment nous pouvons vous aider.</p>
-        </section>
-        <section id="contact">
-            <h2>Contact</h2>
-            <p>N'hésitez pas à nous contacter pour plus d'informations.</p>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2023 Mon Site Internet. Tous droits réservés.</p>
-    </footer>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SERVICES ═══ -->
+<section id="services" class="section">
+  <div class="section-inner">
+    <div class="services-header">
+      <div>
+        <div class="section-label reveal">Nos expertises</div>
+        <h2 class="section-title reveal reveal-delay-1">Des solutions<br>sur <em>mesure</em></h2>
+      </div>
+      <p class="section-desc reveal reveal-delay-2">De la prothèse fixe traditionnelle aux solutions implantaires complexes, nous maîtrisons l'ensemble du spectre technique dentaire.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-num">01</div>
+        <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M24 8C18 8 13 13 13 19c0 3 1 6 3 8l-2 10h20l-2-10c2-2 3-5 3-8 0-6-5-11-11-11z"/>
+          <path d="M18 27c2 1 4 2 6 2s4-1 6-2"/>
+        </svg>
+        <div class="service-title">Prothèses Fixes</div>
+        <div class="service-desc">Couronnes, bridges et inlays-onlays réalisés avec des matériaux biocompatibles de haute qualité pour une intégration naturelle parfaite.</div>
+        <div class="service-arrow">→</div>
+      </div>
+      <div class="service-card reveal reveal-delay-1">
+        <div class="service-num">02</div>
+        <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+          <ellipse cx="24" cy="24" rx="16" ry="10"/>
+          <path d="M14 24c0 4 4 7 10 7s10-3 10-7"/>
+          <circle cx="24" cy="18" r="3"/>
+        </svg>
+        <div class="service-title">Facettes & Esthétique</div>
+        <div class="service-desc">Facettes en céramique ultra-fine et solutions esthétiques avancées pour redonner éclat et harmonie au sourire de vos patients.</div>
+        <div class="service-arrow">→</div>
+      </div>
+      <div class="service-card reveal reveal-delay-2">
+        <div class="service-num">03</div>
+        <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="10" y="10" width="28" height="28" rx="4"/>
+          <path d="M16 24h16M24 16v16"/>
+          <circle cx="20" cy="20" r="2"/>
+          <circle cx="28" cy="20" r="2"/>
+          <circle cx="20" cy="28" r="2"/>
+          <circle cx="28" cy="28" r="2"/>
+        </svg>
+        <div class="service-title">Solutions Implantaires</div>
+        <div class="service-desc">Conception et fabrication de suprastructures implantaires sur mesure, de la couronne unitaire aux bridges implanto-portés complexes.</div>
+        <div class="service-arrow">→</div>
+      </div>
+      <div class="service-card reveal reveal-delay-1">
+        <div class="service-num">04</div>
+        <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M8 36V20l16-12 16 12v16H8z"/>
+          <path d="M18 36V26h12v10"/>
+          <circle cx="24" cy="18" r="4"/>
+        </svg>
+        <div class="service-title">CFAO & Numérique</div>
+        <div class="service-desc">Conception et fabrication assistées par ordinateur pour des prothèses d'une précision incomparable, avec un workflow 100% numérique.</div>
+        <div class="service-arrow">→</div>
+      </div>
+      <div class="service-card reveal reveal-delay-2">
+        <div class="service-num">05</div>
+        <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="12" y="8" width="24" height="32" rx="2"/>
+          <path d="M18 16h12M18 22h12M18 28h8"/>
+          <circle cx="34" cy="34" r="6"/>
+          <path d="M34 31v3l2 2"/>
+        </svg>
+        <div class="service-title">Impression 3D</div>
+        <div class="service-desc">Maîtrise des technologies d'impression 3D dentaire pour la réalisation de guides chirurgicaux, modèles d'étude et prothèses transitoires.</div>
+        <div class="service-arrow">→</div>
+      </div>
+      <div class="service-card reveal reveal-delay-3">
+        <div class="service-num">06</div>
+        <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="24" cy="24" r="14"/>
+          <path d="M24 10v4M24 34v4M10 24h4M34 24h4"/>
+          <circle cx="24" cy="24" r="4"/>
+          <path d="M17 17l2.8 2.8M28.2 28.2L31 31M31 17l-2.8 2.8M19.8 28.2L17 31"/>
+        </svg>
+        <div class="service-title">Conseil & Accompagnement</div>
+        <div class="service-desc">Expertise conseil pour l'évolution technologique de votre cabinet, formation, études techniques et participation à vos projets innovants.</div>
+        <div class="service-arrow">→</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TECHNOLOGIES ═══ -->
+<section id="technologies" class="section">
+  <div class="section-inner">
+    <div class="section-label reveal">Innovation</div>
+    <h2 class="section-title reveal reveal-delay-1" style="color:rgba(255,255,255,0.9)">
+      Des technologies<br>de <em>pointe</em>
+    </h2>
+    <p class="section-desc reveal reveal-delay-2" style="color:rgba(255,255,255,0.45)">Nous investissons dans les équipements les plus avancés pour garantir une précision, une fiabilité et une qualité inégalées.</p>
+    <div class="tech-grid">
+      <div class="tech-item reveal">
+        <span class="tech-item-icon">🦷</span>
+        <div class="tech-item-title">Scanner 3D</div>
+        <div class="tech-item-desc">Acquisition numérique haute résolution pour des empreintes parfaites et une modélisation précise à 20 microns.</div>
+        <span class="tech-item-badge">Haute précision</span>
+      </div>
+      <div class="tech-item reveal reveal-delay-1">
+        <span class="tech-item-icon">💻</span>
+        <div class="tech-item-title">CFAO avancée</div>
+        <div class="tech-item-desc">Logiciels de conception dernière génération pour la modélisation 3D et la fabrication numérique de toutes les prothèses.</div>
+        <span class="tech-item-badge">Workflow digital</span>
+      </div>
+      <div class="tech-item reveal reveal-delay-2">
+        <span class="tech-item-icon">🖨</span>
+        <div class="tech-item-title">Impression 3D</div>
+        <div class="tech-item-desc">Imprimantes résine de précision pour modèles, guides chirurgicaux, prothèses provisoires et orthèses.</div>
+        <span class="tech-item-badge">Résine dentaire</span>
+      </div>
+      <div class="tech-item reveal reveal-delay-3">
+        <span class="tech-item-icon">⚙️</span>
+        <div class="tech-item-title">Usinage 5 axes</div>
+        <div class="tech-item-desc">Fraiseuses 5 axes de dernière génération pour l'usinage de zircone, PMMA, céramique et titane avec une précision sub-micronique.</div>
+        <span class="tech-item-badge">5 axes</span>
+      </div>
+    </div>
+    <div class="tech-showcase">
+      <div class="tech-showcase-visual reveal">
+        <div class="tech-diagram">
+          <div class="tech-nodes-row">
+            <div class="tech-node">📱</div>
+            <div class="tech-node">🖥</div>
+            <div class="tech-node">📡</div>
+          </div>
+          <div class="tech-connector" style="height:20px"></div>
+          <div class="tech-node center">🦷</div>
+          <div class="tech-connector" style="height:20px"></div>
+          <div class="tech-nodes-row">
+            <div class="tech-node">🖨</div>
+            <div class="tech-node">⚙️</div>
+            <div class="tech-node">✅</div>
+          </div>
+        </div>
+      </div>
+      <div class="tech-showcase-list reveal reveal-delay-1">
+        <div class="tech-feat">
+          <div class="tech-feat-icon">🔗</div>
+          <div>
+            <div class="tech-feat-title">Flux numérique intégré</div>
+            <div class="tech-feat-desc">De l'empreinte optique à la livraison finale, notre workflow 100% numérique garantit traçabilité et cohérence parfaite.</div>
+          </div>
+        </div>
+        <div class="tech-feat">
+          <div class="tech-feat-icon">🎯</div>
+          <div>
+            <div class="tech-feat-title">Précision à 20 microns</div>
+            <div class="tech-feat-desc">Nos équipements d'usinage atteignent des tolérances impossibles à obtenir avec les méthodes traditionnelles.</div>
+          </div>
+        </div>
+        <div class="tech-feat">
+          <div class="tech-feat-icon">⚡</div>
+          <div>
+            <div class="tech-feat-title">Délais optimisés</div>
+            <div class="tech-feat-desc">La digitalisation de nos process nous permet de réduire les délais de fabrication jusqu'à 40% sans compromis sur la qualité.</div>
+          </div>
+        </div>
+        <div class="tech-feat">
+          <div class="tech-feat-icon">📊</div>
+          <div>
+            <div class="tech-feat-title">Contrôle qualité continu</div>
+            <div class="tech-feat-desc">Vérification numérique à chaque étape de fabrication pour garantir la conformité absolue de chaque prothèse.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ GALLERY ═══ -->
+<section id="gallery" class="section">
+  <div class="section-inner">
+    <div class="section-label reveal">Nos réalisations</div>
+    <h2 class="section-title reveal reveal-delay-1">L'excellence<br>en <em>images</em></h2>
+    <div class="gallery-filter reveal reveal-delay-2">
+      <button class="filter-btn active" data-filter="all">Tout voir</button>
+      <button class="filter-btn" data-filter="fixe">Prothèse fixe</button>
+      <button class="filter-btn" data-filter="esthe">Esthétique</button>
+      <button class="filter-btn" data-filter="implant">Implantologie</button>
+      <button class="filter-btn" data-filter="cfao">CFAO</button>
+    </div>
+    <div class="gallery-grid reveal reveal-delay-2">
+      <div class="gallery-item" data-cat="fixe" onclick="openLightbox('🦷 Pont Céramique 6 éléments','Prothèse fixe')">
+        <div class="gallery-item-inner"><div class="gallery-placeholder">🦷</div></div>
+        <div class="gallery-overlay">
+          <div><span class="gallery-overlay-tag">Prothèse fixe</span><div class="gallery-overlay-title">Pont céramique 6 éléments</div></div>
+        </div>
+        <div class="gallery-zoom">🔍</div>
+      </div>
+      <div class="gallery-item" data-cat="esthe" onclick="openLightbox('✨ Facettes Feldspathiques','Esthétique')">
+        <div class="gallery-item-inner"><div class="gallery-placeholder">✨</div></div>
+        <div class="gallery-overlay">
+          <div><span class="gallery-overlay-tag">Esthétique</span><div class="gallery-overlay-title">Facettes feldspathiques ×8</div></div>
+        </div>
+        <div class="gallery-zoom">🔍</div>
+      </div>
+      <div class="gallery-item" data-cat="implant" onclick="openLightbox('🔩 Couronne sur Implant','Implantologie')">
+        <div class="gallery-item-inner"><div class="gallery-placeholder">🔩</div></div>
+        <div class="gallery-overlay">
+          <div><span class="gallery-overlay-tag">Implantologie</span><div class="gallery-overlay-title">Couronne sur implant</div></div>
+        </div>
+        <div class="gallery-zoom">🔍</div>
+      </div>
+      <div class="gallery-item" data-cat="cfao" onclick="openLightbox('💻 Zircone CFAO','CFAO')">
+        <div class="gallery-item-inner"><div class="gallery-placeholder">💻</div></div>
+        <div class="gallery-overlay">
+          <div><span class="gallery-overlay-tag">CFAO</span><div class="gallery-overlay-title">Couronne zircone monolithique</div></div>
+        </div>
+        <div class="gallery-zoom">🔍</div>
+      </div>
+      <div class="gallery-item" data-cat="esthe" onclick="openLightbox('🌟 Composite Direct','Esthétique')">
+        <div class="gallery-item-inner"><div class="gallery-placeholder">🌟</div></div>
+        <div class="gallery-overlay">
+          <div><span class="gallery-overlay-tag">Esthétique</span><div class="gallery-overlay-title">Reconstruction esthétique</div></div>
+        </div>
+        <div class="gallery-zoom">🔍</div>
+      </div>
+      <div class="gallery-item" data-cat="implant" onclick="openLightbox('🔗 Bridge Implanto-porté','Implantologie')">
+        <div class="gallery-item-inner"><div class="gallery-placeholder">🔗</div></div>
+        <div class="gallery-overlay">
+          <div><span class="gallery-overlay-tag">Implantologie</span><div class="gallery-overlay-title">Bridge implanto-porté 4 éléments</div></div>
+        </div>
+        <div class="gallery-zoom">🔍</div>
+      </div>
+      <div class="gallery-item" data-cat="fixe" onclick="openLightbox('💎 Céramique pressée','Prothèse fixe')">
+        <div class="gallery-item-inner"><div class="gallery-placeholder">💎</div></div>
+        <div class="gallery-overlay">
+          <div><span class="gallery-overlay-tag">Prothèse fixe</span><div class="gallery-overlay-title">Inlay-onlay céramique pressée</div></div>
+        </div>
+        <div class="gallery-zoom">🔍</div>
+      </div>
+      <div class="gallery-item" data-cat="cfao" onclick="openLightbox('⚙️ Full Arch Numérique','CFAO')">
+        <div class="gallery-item-inner"><div class="gallery-placeholder">⚙️</div></div>
+        <div class="gallery-overlay">
+          <div><span class="gallery-overlay-tag">CFAO</span><div class="gallery-overlay-title">Full arch numérique</div></div>
+        </div>
+        <div class="gallery-zoom">🔍</div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <div class="lightbox-content" id="lightbox-content"></div>
+</div>
+
+<!-- ═══ WHY ═══ -->
+<section id="why" class="section">
+  <div class="section-inner">
+    <div class="section-label reveal">Pourquoi DENTEM</div>
+    <h2 class="section-title reveal reveal-delay-1">Ce qui nous<br>rend <em>différents</em></h2>
+    <div class="why-grid">
+      <div class="why-text">
+        <div class="why-item reveal">
+          <div class="why-num">01</div>
+          <div>
+            <div class="why-title">Réactivité et délais garantis</div>
+            <div class="why-desc">Nous savons que votre planning est serré. Nos process digitaux nous permettent de tenir nos délais avec une fiabilité de 98%, en urgence si nécessaire.</div>
+          </div>
+        </div>
+        <div class="why-item reveal reveal-delay-1">
+          <div class="why-num">02</div>
+          <div>
+            <div class="why-title">Qualité certifiée et traçabilité totale</div>
+            <div class="why-desc">Chaque prothèse est accompagnée d'un certificat de conformité. Nous garantissons la traçabilité complète des matériaux utilisés.</div>
+          </div>
+        </div>
+        <div class="why-item reveal reveal-delay-2">
+          <div class="why-num">03</div>
+          <div>
+            <div class="why-title">Interlocuteur unique dédié</div>
+            <div class="why-desc">Votre prothésiste référent vous accompagne de A à Z, de l'analyse du cas clinique jusqu'à la livraison. Une relation directe, sans intermédiaire.</div>
+          </div>
+        </div>
+        <div class="why-item reveal reveal-delay-3">
+          <div class="why-num">04</div>
+          <div>
+            <div class="why-title">Ancrage local en Bretagne</div>
+            <div class="why-desc">Situé à Plouhinec au cœur du Morbihan, nous intervenons sur toute la Bretagne avec une connaissance fine du tissu dentaire régional.</div>
+          </div>
+        </div>
+      </div>
+      <div class="counters-grid">
+        <div class="counter-card reveal">
+          <div class="counter-num"><span class="count" data-target="15">0</span><span class="counter-suffix">+</span></div>
+          <div class="counter-label">Années d'expertise</div>
+        </div>
+        <div class="counter-card reveal reveal-delay-1">
+          <div class="counter-num"><span class="count" data-target="500">0</span><span class="counter-suffix">+</span></div>
+          <div class="counter-label">Chirurgiens partenaires</div>
+        </div>
+        <div class="counter-card reveal reveal-delay-2">
+          <div class="counter-num"><span class="count" data-target="98">0</span><span class="counter-suffix">%</span></div>
+          <div class="counter-label">Satisfaction client</div>
+        </div>
+        <div class="counter-card reveal reveal-delay-3">
+          <div class="counter-num"><span class="count" data-target="5000">0</span><span class="counter-suffix">+</span></div>
+          <div class="counter-label">Prothèses par an</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TESTIMONIALS ═══ -->
+<section id="testimonials" class="section">
+  <div class="section-inner">
+    <div class="section-label reveal">Ils nous font confiance</div>
+    <h2 class="section-title reveal reveal-delay-1">Témoignages<br>de nos <em>partenaires</em></h2>
+    <div class="testi-track-wrap">
+      <div class="testi-track" id="testi-track">
+        <div class="testi-card">
+          <div class="testi-quote">"</div>
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-text">DENTEM est devenu un partenaire indispensable de mon cabinet. La qualité des prothèses est irréprochable et les délais sont toujours respectés. Un niveau d'exigence qui correspond parfaitement à mes attentes.</p>
+          <div class="testi-author">
+            <div class="testi-avatar">DM</div>
+            <div>
+              <div class="testi-name">Dr. Marie Dupont</div>
+              <div class="testi-role">Chirurgienne-dentiste — Lorient</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-quote">"</div>
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-text">La maîtrise du numérique chez DENTEM est impressionnante. Depuis que nous travaillons ensemble, mes cas en CFAO sont traités avec une précision que je n'avais jamais connue auparavant.</p>
+          <div class="testi-author">
+            <div class="testi-avatar">PT</div>
+            <div>
+              <div class="testi-name">Dr. Pierre Tanguy</div>
+              <div class="testi-role">Implantologiste — Vannes</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-quote">"</div>
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-text">Ce qui me plaît particulièrement, c'est l'implication de l'équipe DENTEM dans chaque cas. Ils ne sont pas de simples sous-traitants, mais de véritables collaborateurs techniques qui partagent ma passion pour l'excellence.</p>
+          <div class="testi-author">
+            <div class="testi-avatar">SL</div>
+            <div>
+              <div class="testi-name">Dr. Sophie Le Gall</div>
+              <div class="testi-role">Esthétique dentaire — Brest</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-quote">"</div>
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-text">J'apprécie la réactivité et la transparence de DENTEM. Chaque prothèse arrive avec une documentation complète, et leur interlocuteur dédié répond toujours présent pour les cas urgents.</p>
+          <div class="testi-author">
+            <div class="testi-avatar">FL</div>
+            <div>
+              <div class="testi-name">Dr. François Léonard</div>
+              <div class="testi-role">Chirurgien-dentiste — Quimper</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-controls reveal">
+      <button class="testi-btn" id="testi-prev">←</button>
+      <div class="testi-dots" id="testi-dots">
+        <div class="testi-dot active"></div>
+        <div class="testi-dot"></div>
+        <div class="testi-dot"></div>
+        <div class="testi-dot"></div>
+      </div>
+      <button class="testi-btn" id="testi-next">→</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CONTACT ═══ -->
+<section id="contact" class="section">
+  <div class="section-inner">
+    <div class="section-label reveal">Travaillons ensemble</div>
+    <h2 class="section-title reveal reveal-delay-1">Contactez<br><em>DENTEM</em></h2>
+    <div class="contact-grid">
+      <div class="contact-info reveal">
+        <div class="contact-info-item">
+          <div class="contact-info-icon">📍</div>
+          <div>
+            <div class="contact-info-label">Adresse</div>
+            <div class="contact-info-value">18 Route de Locquenin<br>56680 Plouhinec, Bretagne</div>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-info-icon">📞</div>
+          <div>
+            <div class="contact-info-label">Téléphone</div>
+            <div class="contact-info-value">+33 (0)2 97 XX XX XX</div>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-info-icon">✉️</div>
+          <div>
+            <div class="contact-info-label">Email</div>
+            <div class="contact-info-value">contact@dentem.fr</div>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-info-icon">🕐</div>
+          <div>
+            <div class="contact-info-label">Horaires</div>
+            <div class="contact-info-value">Lundi – Vendredi : 8h00 – 18h00<br>Samedi : 8h00 – 12h00</div>
+          </div>
+        </div>
+        <div class="map-embed">
+          <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=-3.31,47.66,-3.29,47.68&layer=mapnik&marker=47.67,-3.30" loading="lazy" title="Localisation DENTEM"></iframe>
+        </div>
+      </div>
+      <div class="reveal reveal-delay-1">
+        <form id="contact-form" onsubmit="handleSubmit(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="nom">Nom *</label>
+              <input type="text" id="nom" class="form-input" placeholder="Dr. Jean Martin" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="cabinet">Cabinet *</label>
+              <input type="text" id="cabinet" class="form-input" placeholder="Cabinet dentaire Martin" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="email">Email *</label>
+              <input type="email" id="email" class="form-input" placeholder="contact@cabinet.fr" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="tel">Téléphone</label>
+              <input type="tel" id="tel" class="form-input" placeholder="+33 6 XX XX XX XX">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="sujet">Sujet</label>
+            <select id="sujet" class="form-input">
+              <option value="">Sélectionnez un sujet</option>
+              <option>Demande de devis</option>
+              <option>Prothèse fixe</option>
+              <option>CFAO & Numérique</option>
+              <option>Implantologie</option>
+              <option>Partenariat</option>
+              <option>Autre</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="message">Message *</label>
+            <textarea id="message" class="form-textarea" placeholder="Décrivez votre besoin ou votre cas clinique…" required></textarea>
+          </div>
+          <p class="form-note">* Champs obligatoires. Vos données sont traitées conformément à notre politique de confidentialité.</p>
+          <button type="submit" class="btn-primary" style="margin-top:1.5rem;width:100%;justify-content:center">
+            Envoyer le message
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+          </button>
+          <div class="form-success" id="form-success">
+            ✅ Merci ! Votre message a bien été envoyé. Nous vous répondrons dans les 24 heures.
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand-name">DENTEM</div>
+        <p class="footer-brand-desc">Laboratoire de prothèse dentaire d'excellence situé à Plouhinec, Bretagne. Expertise artisanale et technologies numériques au service des professionnels.</p>
+        <div style="display:flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:0.65rem;color:rgba(255,255,255,0.25);letter-spacing:0.1em">
+          <span style="width:6px;height:6px;border-radius:50%;background:var(--crimson-soft);display:inline-block;animation:blink 2s infinite"></span>
+          PLOUHINEC, BRETAGNE
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Services</div>
+        <ul class="footer-links">
+          <li><a href="#services">Prothèses fixes</a></li>
+          <li><a href="#services">Facettes & esthétique</a></li>
+          <li><a href="#services">Implantologie</a></li>
+          <li><a href="#services">CFAO & numérique</a></li>
+          <li><a href="#services">Impression 3D</a></li>
+          <li><a href="#services">Conseil & formation</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Entreprise</div>
+        <ul class="footer-links">
+          <li><a href="#about">À propos</a></li>
+          <li><a href="#technologies">Technologies</a></li>
+          <li><a href="#gallery">Réalisations</a></li>
+          <li><a href="#testimonials">Témoignages</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Légal</div>
+        <ul class="footer-links">
+          <li><a href="#">Mentions légales</a></li>
+          <li><a href="#">Politique de confidentialité</a></li>
+          <li><a href="#">CGV</a></li>
+          <li><a href="#">Plan du site</a></li>
+        </ul>
+        <div class="footer-col-title" style="margin-top:1.5rem">Contact</div>
+        <ul class="footer-links">
+          <li><a href="tel:+33297000000">+33 (0)2 97 XX XX XX</a></li>
+          <li><a href="mailto:contact@dentem.fr">contact@dentem.fr</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 DENTEM — Tous droits réservés · 18 Route de Locquenin, 56680 Plouhinec</div>
+      <div class="footer-socials">
+        <a class="social-btn" href="#" title="LinkedIn">in</a>
+        <a class="social-btn" href="#" title="Facebook">f</a>
+        <a class="social-btn" href="#" title="Instagram">ig</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ─── LOADER ───
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hidden');
+  }, 1800);
+});
+
+// ─── CURSOR ───
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.transform = `translate(${mx}px,${my}px) translate(-50%,-50%)`;
+});
+(function animRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  cursorRing.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%)`;
+  requestAnimationFrame(animRing);
+})();
+document.querySelectorAll('a,button,.service-card,.gallery-item,.testi-btn,.filter-btn').forEach(el => {
+  el.addEventListener('mouseenter', () => cursorRing.classList.add('hovered'));
+  el.addEventListener('mouseleave', () => cursorRing.classList.remove('hovered'));
+});
+
+// ─── NAVBAR ───
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// ─── DARK MODE ───
+const toggleBtn = document.getElementById('dark-toggle');
+let dark = localStorage.getItem('dentem-dark') === '1';
+if (dark) { document.documentElement.setAttribute('data-theme','dark'); toggleBtn.textContent = '☀️'; }
+toggleBtn.addEventListener('click', () => {
+  dark = !dark;
+  document.documentElement.setAttribute('data-theme', dark ? 'dark' : '');
+  toggleBtn.textContent = dark ? '☀️' : '🌙';
+  localStorage.setItem('dentem-dark', dark ? '1' : '0');
+});
+
+// ─── MOBILE MENU ───
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobile-menu');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('open');
+  mobileMenu.classList.toggle('open');
+  document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+});
+document.querySelectorAll('.mobile-link').forEach(link => {
+  link.addEventListener('click', () => {
+    hamburger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+});
+
+// ─── REVEAL ON SCROLL ───
+const revealObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// ─── COUNTERS ───
+const counters = document.querySelectorAll('.count');
+let counted = false;
+const counterObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !counted) {
+      counted = true;
+      counters.forEach(counter => {
+        const target = +counter.getAttribute('data-target');
+        let current = 0;
+        const increment = target / 60;
+        const update = () => {
+          current += increment;
+          if (current < target) { counter.textContent = Math.floor(current); requestAnimationFrame(update); }
+          else { counter.textContent = target; }
+        };
+        requestAnimationFrame(update);
+      });
+    }
+  });
+}, { threshold: 0.5 });
+const whySection = document.getElementById('why');
+if (whySection) counterObserver.observe(whySection);
+
+// ─── GALLERY FILTER ───
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('.gallery-item').forEach(item => {
+      const show = filter === 'all' || item.dataset.cat === filter;
+      item.style.display = show ? '' : 'none';
+      item.style.opacity = show ? '1' : '0';
+    });
+  });
+});
+
+// ─── LIGHTBOX ───
+function openLightbox(emoji, label) {
+  const lb = document.getElementById('lightbox');
+  const content = document.getElementById('lightbox-content');
+  content.innerHTML = `<div style="text-align:center"><div style="font-size:5rem;margin-bottom:1rem">${emoji.split(' ')[0]}</div><div style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:white;margin-bottom:0.5rem">${emoji.split(' ').slice(1).join(' ')}</div><div style="font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.4)">${label}</div></div>`;
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+// ─── TESTIMONIALS SLIDER ───
+const track = document.getElementById('testi-track');
+const dots = document.querySelectorAll('.testi-dot');
+let currentSlide = 0;
+const totalSlides = 4;
+function goToSlide(n) {
+  currentSlide = (n + totalSlides) % totalSlides;
+  const cardWidth = track.querySelector('.testi-card').offsetWidth + 24;
+  track.style.transform = `translateX(-${currentSlide * cardWidth}px)`;
+  dots.forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+}
+document.getElementById('testi-prev').addEventListener('click', () => goToSlide(currentSlide - 1));
+document.getElementById('testi-next').addEventListener('click', () => goToSlide(currentSlide + 1));
+dots.forEach((d, i) => d.addEventListener('click', () => goToSlide(i)));
+setInterval(() => goToSlide(currentSlide + 1), 5000);
+
+// ─── CONTACT FORM ───
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('button[type=submit]');
+  btn.disabled = true;
+  btn.textContent = 'Envoi en cours…';
+  setTimeout(() => {
+    btn.textContent = '✓ Message envoyé';
+    document.getElementById('form-success').style.display = 'block';
+    e.target.reset();
+  }, 1400);
+}
+
+// ─── SMOOTH PARALLAX HERO ───
+window.addEventListener('scroll', () => {
+  const scrolled = window.scrollY;
+  const orb = document.querySelector('.hero-orb');
+  if (orb) orb.style.transform = `translateY(calc(-50% + ${scrolled * 0.3}px))`;
+  const heroGrid = document.querySelector('.hero-grid');
+  if (heroGrid) heroGrid.style.transform = `translateY(${scrolled * 0.15}px)`;
+});
+</script>
 </body>
 </html>
-```
-
-### Explication du code
-
-1. **Balises de base** :
-    - `<!DOCTYPE html>` : Déclare le type de document.
-    - `<html lang="fr">` : Balise racine de la page, avec la langue définie sur le français.
-    - `<head>` : Contient les métadonnées et les liens vers les ressources externes.
-    - `<meta charset="UTF-8">` : Définit l'encodage des caractères.
-    - `<meta name="viewport" content="width=device-width, initial-scale=1.0">` : Assure que la page est responsive.
-    - `<title>Mon Site Internet</title>` : Définit le titre de la page.
-    - `<style>` : Contient le CSS pour styliser la page.
-
-2. **Structure de la page** :
-    - `<header>` : Contient l'en-tête de la page.
-    - `<nav>` : Contient la navigation du site.
-    - `<main>` : Contient le contenu principal de la page.
-    - `<section>` : Contient des sections spécifiques du contenu.
-    - `<footer>` : Contient le pied de page de la page.
-
-3. **CSS** :
-    - `body` : Style de base pour le corps de la page.
-    - `header` : Style pour l'en-tête de la page.
-    - `nav` : Style pour la navigation du site.
-    - `main` : Style pour le contenu principal de la page.
-    - `footer` : Style pour le pied de page de la page.
