@@ -1,0 +1,107 @@
+```html
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Site Internet</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        nav {
+            background-color: #444;
+            padding: 1rem;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav ul li {
+            margin: 0 1rem;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+        main {
+            padding: 2rem;
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Bienvenue sur Mon Site Internet</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#accueil">Accueil</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+    <main>
+        <section id="accueil">
+            <h2>Accueil</h2>
+            <p>Bienvenue sur notre site internet. Nous sommes ravis de vous accueillir ici.</p>
+        </section>
+        <section id="services">
+            <h2>Services</h2>
+            <p>Découvrez nos services et comment nous pouvons vous aider.</p>
+        </section>
+        <section id="contact">
+            <h2>Contact</h2>
+            <p>N'hésitez pas à nous contacter pour plus d'informations.</p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 Mon Site Internet. Tous droits réservés.</p>
+    </footer>
+</body>
+</html>
+```
+
+### Explication du code
+
+1. **Balises de base** :
+    - `<!DOCTYPE html>` : Déclare le type de document.
+    - `<html lang="fr">` : Balise racine de la page, avec la langue définie sur le français.
+    - `<head>` : Contient les métadonnées et les liens vers les ressources externes.
+    - `<meta charset="UTF-8">` : Définit l'encodage des caractères.
+    - `<meta name="viewport" content="width=device-width, initial-scale=1.0">` : Assure que la page est responsive.
+    - `<title>Mon Site Internet</title>` : Définit le titre de la page.
+    - `<style>` : Contient le CSS pour styliser la page.
+
+2. **Structure de la page** :
+    - `<header>` : Contient l'en-tête de la page.
+    - `<nav>` : Contient la navigation du site.
+    - `<main>` : Contient le contenu principal de la page.
+    - `<section>` : Contient des sections spécifiques du contenu.
+    - `<footer>` : Contient le pied de page de la page.
+
+3. **CSS** :
+    - `body` : Style de base pour le corps de la page.
+    - `header` : Style pour l'en-tête de la page.
+    - `nav` : Style pour la navigation du site.
+    - `main` : Style pour le contenu principal de la page.
+    - `footer` : Style pour le pied de page de la page.
